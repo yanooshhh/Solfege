@@ -66,7 +66,7 @@ export default function UploadScreen({ navigation }) {
       blurRadius={30}
     >
       <View>
-        {image !== null && (
+        {(
           <View style={styles.imageLoaded}>
             <Image source={{ uri: image }} style={styles.image} />
             <View style={styles.buttons}>

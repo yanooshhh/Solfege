@@ -1,22 +1,72 @@
 import React, { useState, useEffect } from "react";
-import {StyleSheet, ImageBackground, View, Text} from "react-native";
+import {StyleSheet, ImageBackground, View, Text, Button, Image} from "react-native";
+import {Picker} from '@react-native-picker/picker';
 
 export default function SettingsScreen({ navigation }) {
 
-    const wheelPickerData =[
-        "F major",
-        "C major",
-        "G major"
-    ];
+
+    const [key, setKey] = useState(5);
+    const [tempo, setTempo] = useState(2);
+
 
     return(
         <ImageBackground
         style={styles.background}
         source={require("../assets/background.jpg")}
-        blurRadius={30}
+        blurRadius={20}
         >
-            <View>
-                            </View>
+            <Image style={styles.logo} source={require("../assets/logo.png")} />
+            <View style={{marginBottom:110}}>
+                <View style={styles.buttons} >
+                    <View>
+                        <Text style={styles.text}>Key signature</Text>
+                        <Picker
+                            
+                            selectedValue={key}
+                            style={styles.button}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setKey(itemValue)
+                            }>
+                            <Picker.Item label="D♭ / b♭m      (5 flats)" value="-5" />
+                            <Picker.Item label="A♭ / d♭m      (4 flats)" value="-4" />
+                            <Picker.Item label="E♭ / a♭m      (3 flats)" value="-3" />
+                            <Picker.Item label="B♭ / gm       (2 flats)" value="-2" />
+                            <Picker.Item label="F / dm         (1 flat)" value="-1" />
+                            <Picker.Item label="C / am" value="0" />
+                            <Picker.Item label="G / em        (1 sharp)" value="1" />
+                            <Picker.Item label="D / bm        (2 sharps)" value="2" />
+                            <Picker.Item label="A / f♯m       (3 sharps)" value="3" />
+                            <Picker.Item label="E / c♯m       (4 sharps)" value="4" />
+                            <Picker.Item label="B / g♯m       (5 sharps)" value="5" />
+                        </Picker>
+                    </View>
+                    <View>
+                        <Text style={styles.text}>Tempo</Text>
+                        <Picker
+                            selectedValue={tempo}
+                            style={styles.button}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setTempo(itemValue)
+                            }>
+                            <Picker.Item label="Slow" value="1" />
+                            <Picker.Item label="Moderate" value="2" />
+                            <Picker.Item label="Fast" value="3" />
+
+                        </Picker>
+                    </View>
+                    
+                </View>
+            </View>
+            <View style={styles.buttons}>
+              <View style={styles.buttonnext}>
+                <Button
+                  color="#de5b5b"
+                  style={styles.buttons}
+                  title="Next"
+                  onPress={() => navigation.navigate("Play")}
+                />
+              </View>
+            </View>
         </ImageBackground>
     );
 }
@@ -24,6 +74,40 @@ export default function SettingsScreen({ navigation }) {
 const styles = StyleSheet.create({
     background: {
       flex: 1,
-      justifyContent: "center",
-    }
+      justifyContent: "flex-end",
+      alignItems: 'center'
+    },
+    buttons: {
+        padding: 20,
+        alignItems: "center",
+        width: "100%"
+      },
+      button: {
+        backgroundColor: "#de5b5b",
+        color: "#FFFFFF",
+        height: 30,
+        width: 170,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 20
+      },
+      buttonnext: {
+        backgroundColor: "#00000000",
+        marginTop: 20,
+        height: 50,
+        width: "100%",
+        justifyContent: "center",
+      },
+    text:{
+        color: "#FFFFFF",
+        fontSize: 20,
+        alignSelf: "center",
+        padding: 20
+    },
+      logo: {
+        position: "absolute",
+        top: 90,
+        width: "50%",
+        height: 80,
+      },
 });

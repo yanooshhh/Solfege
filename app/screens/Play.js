@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import {
   Text,
   View,
@@ -11,51 +11,63 @@ import {
 } from "react-native";
 import {Audio} from "expo-av";
 
+export default class PlayScreen extends Component{
+  async componentDidMount(){
+    Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      playsInSilentModeIOS: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
+      shouldDuckAndroid: true,
+      staysActiveInBackground: true,
+      playThroughEarpieceAndroid: true
+    });
+
+    this.sound = new Audio.Sound();
+
+    const status = {
+      shouldPlay: false,
+      volume: 1.0
+    };
+
+    this.sound.loadAsync({uri:'https://ia800204.us.archive.org/11/items/hamlet_0911_librivox/hamlet_act1_shakespeare.mp3'}, status, false);
+  }
+
+  playSound() {
+    this.sound.playAsync();
+  };
+
+  stopSound(){
+    this.sound.stopAsync()
+  }
 
 
-function PlayScreen({ navigation }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  console.log(isPlaying);
-
-  const soundObject = new Audio.Sound();
-  
-  useEffect(()=>{ 
-    (async() => {
-      await soundObject.loadAsync(require("../assets/vlog_intro.mp3"));
-  })()},[]);
-
-
-  return (
-    <ImageBackground
-      style={styles.background}
-      source={require("../assets/background.jpg")}
-      blurRadius={30}
-    >
-      <View style={styles.button}>
-        {isPlaying ? (
-          <Button
-            title="Pause"
-            color="#de5b5b"
-            onPress={() => {
-              async() => soundObject.stopAsync();
-              setIsPlaying(false);
-            }}
-          />
-        ) : (
-          <Button
-            title="Play"
-            color="#de5b5b"
-            onPress={() => 
-              {
-                soundObject.playAsync()
-                
-                setIsPlaying(true);
-              }}
-          />
-        )}
-      </View>
-    </ImageBackground>
-  );
+  render(){
+    return(
+      <ImageBackground
+        style={styles.background}
+        source={require("../assets/background.jpg")}
+        blurRadius={30}
+      >
+        <View>
+            <View style={styles.buttons}>
+              <View style={styles.button}>
+                  <Button
+                    color="#de5b5b"
+                    title="Pause"
+                    onPress={this.stopSound.bind(this)}
+                  />
+                  <Button 
+                    color="#de5b5b" 
+                    title="Play" 
+                    onPress={this.playSound.bind(this)}
+                  />
+                </View>
+            </View>
+        </View>
+      </ImageBackground>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -75,4 +87,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlayScreen;
