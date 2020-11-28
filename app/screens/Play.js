@@ -14,9 +14,6 @@ import {Audio} from "expo-av";
 export default class PlayScreen extends Component{
   async componentDidMount(){
     Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-      playsInSilentModeIOS: true,
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
       shouldDuckAndroid: true,
       staysActiveInBackground: true,
@@ -30,7 +27,7 @@ export default class PlayScreen extends Component{
       volume: 1.0
     };
 
-    this.sound.loadAsync({uri:'https://ia800204.us.archive.org/11/items/hamlet_0911_librivox/hamlet_act1_shakespeare.mp3'}, status, false);
+    this.sound.loadAsync({uri:'https://raw.githubusercontent.com/yanooshhh/lines_ex/master/vlog_intro.mp3'}, status, false);
   }
 
   playSound() {
@@ -43,6 +40,8 @@ export default class PlayScreen extends Component{
 
 
   render(){
+    const {imageUri, key, tempo, clef} = this.props.route.params;
+
     return(
       <ImageBackground
         style={styles.background}
@@ -52,6 +51,8 @@ export default class PlayScreen extends Component{
         <View>
             <View style={styles.buttons}>
               <View style={styles.button}>
+                  {/* <Text>{imageUri}</Text>
+                  <Image source={{uri: imageUri}} style={{height: 100, width:100}}/> */}
                   <Button
                     color="#de5b5b"
                     title="Pause"
@@ -84,6 +85,11 @@ const styles = StyleSheet.create({
 
     width: "100%",
     justifyContent: "center",
+  },
+  buttons: {
+    padding: 20,
+    alignItems: "center",
+    width: "100%"
   },
 });
 

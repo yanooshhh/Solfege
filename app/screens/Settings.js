@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import {StyleSheet, ImageBackground, View, Text, Button, Image} from "react-native";
 import {Picker} from '@react-native-picker/picker';
 
-export default function SettingsScreen({ navigation }) {
+export default function SettingsScreen({ route, navigation }) {
 
 
-    const [key, setKey] = useState(5);
-    const [tempo, setTempo] = useState(2);
-
+    const [key, setKey] = useState("0");
+    const [tempo, setTempo] = useState("2");
+    const [clef, setClef] = useState("1");
 
     return(
         <ImageBackground
@@ -16,15 +16,14 @@ export default function SettingsScreen({ navigation }) {
         blurRadius={20}
         >
             <Image style={styles.logo} source={require("../assets/logo.png")} />
-            <View style={{marginBottom:110}}>
+            <View>
                 <View style={styles.buttons} >
                     <View>
                         <Text style={styles.text}>Key signature</Text>
-                        <Picker
-                            
+                        <Picker 
                             selectedValue={key}
                             style={styles.button}
-                            onValueChange={(itemValue, itemIndex) =>
+                            onValueChange={(itemValue) =>
                                 setKey(itemValue)
                             }>
                             <Picker.Item label="D♭ / b♭m      (5 flats)" value="-5" />
@@ -54,7 +53,19 @@ export default function SettingsScreen({ navigation }) {
 
                         </Picker>
                     </View>
-                    
+                    <View>
+                        <Text style={styles.text}>Clef</Text>
+                        <Picker
+                            selectedValue={clef}
+                            style={styles.button}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setClef(itemValue)
+                            }>
+                            <Picker.Item label="Treble" value="1" />
+                            <Picker.Item label="Bass" value="2" />
+
+                        </Picker>
+                    </View>
                 </View>
             </View>
             <View style={styles.buttons}>
@@ -63,7 +74,7 @@ export default function SettingsScreen({ navigation }) {
                   color="#de5b5b"
                   style={styles.buttons}
                   title="Next"
-                  onPress={() => navigation.navigate("Play")}
+                  onPress={() => navigation.navigate("Play", {imageUri: route.params.imageUri, key: key, tempo: tempo, clef: clef})}
                 />
               </View>
             </View>
@@ -106,7 +117,7 @@ const styles = StyleSheet.create({
     },
       logo: {
         position: "absolute",
-        top: 90,
+        top: 100,
         width: "50%",
         height: 80,
       },

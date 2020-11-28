@@ -66,16 +66,16 @@ export default function UploadScreen({ navigation }) {
       blurRadius={30}
     >
       <View>
-        {(
+        {image !== null &&(
           <View style={styles.imageLoaded}>
-            <Image source={{ uri: image }} style={styles.image} />
+            <Image source={{ uri: image }} style={styles.image} resizeMode="contain"/>
             <View style={styles.buttons}>
               <View style={styles.button}>
                 <Button
                   color="#de5b5b"
                   style={styles.buttons}
                   title="Next"
-                  onPress={() => navigation.navigate("Settings")}
+                  onPress={() => navigation.navigate("Settings", { imageUri: image})}
                 />
               </View>
             </View>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "90%",
-    aspectRatio: 1,
+    aspectRatio: 3,
     borderWidth: 5,
     borderColor: "white",
     borderRadius: 5,
