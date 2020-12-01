@@ -27,15 +27,22 @@ export default class PlayScreen extends Component{
       volume: 1.0
     };
 
-    this.sound.loadAsync({uri:'https://raw.githubusercontent.com/yanooshhh/lines_ex/master/vlog_intro.mp3'}, status, false);
+    //this.sound.loadAsync({uri:'https://raw.githubusercontent.com/yanooshhh/lines_ex/master/vlog_intro.mp3'}, status, false);
+    //this.sound.loadAsync({uri:'https://raw.githubusercontent.com/yanooshhh/lines_ex/master/lassus.wav'}, status, false);
+    //this.sound.loadAsync({uri:'http://solfege.northeurope.cloudapp.azure.com/static/266b3b02348e4c65a3d5005081956815.mp3'}, status, false);
+    this.sound.loadAsync({uri:'http://solfege.northeurope.cloudapp.azure.com/static/output.wav'}, status, false);
   }
 
-  playSound() {
+  async playSound() {
     this.sound.playAsync();
+    let status = await this.sound.getStatusAsync();
+    console.log(status);
   };
 
-  stopSound(){
-    this.sound.stopAsync()
+  async stopSound(){
+    this.sound.stopAsync();
+    let status = await this.sound.getStatusAsync();
+    console.log(status);
   }
 
 

@@ -17,12 +17,21 @@ function HomeScreen({ navigation }) {
       source={require("../assets/background.jpg")}
     >
       <Image style={styles.logo} source={require("../assets/logo.png")} />
-      <View style={styles.start}>
-        <Button
-          title="Start"
-          color="#de5b5b"
-          onPress={() => navigation.navigate("Upload")}
-        />
+      <View style={styles.buttons}>
+        <View style={styles.button}>
+          <Button 
+            title="Start"
+            color="#de5b5b"
+            onPress={() => navigation.navigate("Upload")}
+          />
+        </View>
+        <View style={styles.button}>
+          <Button 
+            title="About"
+            color="#de5b5b"
+            onPress={() => navigation.navigate("Upload")}
+          />
+        </View>
       </View>
     </ImageBackground>
   );
@@ -41,13 +50,16 @@ const styles = StyleSheet.create({
     width: "80%",
     height: 110,
   },
-  start: {
+  buttons: {
     width: "80%",
-    height: 60,
+    height: 90,
     backgroundColor: "#00000000",
     justifyContent: "center",
     marginBottom: 30,
   },
+  button: {
+    paddingBottom: 20,
+  }
 });
 
 export default HomeScreen;

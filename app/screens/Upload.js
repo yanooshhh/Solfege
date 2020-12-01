@@ -7,38 +7,41 @@ import {
   StyleSheet,
   Text,
   ImageBackground,
+  Alert
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 
 export default function UploadScreen({ navigation }) {
   const [image, setImage] = useState(null);
-  const [hasPermission, setHasPermission] = useState(null);
+  const [cameraPermission, setCameraPermission] = useState(false);
+  const [galleryPermission, setGalleryPermission] = useState(false);
 
   useEffect(() => {
     (async () => {
       const statusGallery = await ImagePicker.requestCameraRollPermissionsAsync();
       const statusCamera = await ImagePicker.requestCameraPermissionsAsync();
-      setHasPermission(statusCamera.granted && statusGallery.granted);
+      setCameraPermission(statusCamera.granted);
+      setGalleryPermission(statusGallery.granted)
     })();
   }, []);
 
-  if (hasPermission === null) {
-    return <Text style={{ alignContent: "center" }}>Dupa</Text>;
-  }
-
-  if (hasPermission === false) {
-    return <Text>No camera or gallery access</Text>;
-  }
-
   const pickImage = async () => {
+    if(galleryPermission===false){
+      Alert.alert(
+        "Permission denied",
+        "To choose photos from your library, go to the privacy settings and allow the access to the library",
+        [{text:"Got it!"}]
+      )
+      return;
+    }
+    
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      quality: 1,
     });
 
-    console.log(result);
+    //console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
@@ -46,13 +49,21 @@ export default function UploadScreen({ navigation }) {
   };
 
   const takeImage = async () => {
+    if(cameraPermission===false){
+      Alert.alert(
+        "Permission denied",
+        "To take photos, go to the privacy settings and allow the access to the camera",
+        [{text:"Got it!"}]
+      )
+      return;
+    }
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      quality: 1,
+      
     });
 
-    console.log(result);
+    //console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
@@ -65,15 +76,21 @@ export default function UploadScreen({ navigation }) {
       source={require("../assets/background.jpg")}
       blurRadius={30}
     >
-      <View>
+      <View style={styles.box}>
         {image !== null &&(
-          <View style={styles.imageLoaded}>
+          <View>
             <Image source={{ uri: image }} style={styles.image} resizeMode="contain"/>
             <View style={styles.buttons}>
               <View style={styles.button}>
                 <Button
                   color="#de5b5b"
-                  style={styles.buttons}
+                  title="Reset"
+                  onPress={() => setImage(null)}
+                />
+              </View>
+              <View style={styles.button}>
+                <Button
+                  color="#de5b5b"
                   title="Next"
                   onPress={() => navigation.navigate("Settings", { imageUri: image})}
                 />
@@ -83,16 +100,20 @@ export default function UploadScreen({ navigation }) {
         )}
 
         {image === null && (
-          <View style={styles.buttons}>
+          <View>
+            <View style={styles.button}>
+              <Button 
+                color="#de5b5b" 
+                title="Take a photo" 
+                onPress={takeImage} 
+              />
+            </View>
             <View style={styles.button}>
               <Button
                 color="#de5b5b"
                 title="Choose from gallery"
                 onPress={pickImage}
               />
-            </View>
-            <View style={styles.button}>
-              <Button color="#de5b5b" title="Take a photo" onPress={takeImage} />
             </View>
           </View>
         )}
@@ -104,30 +125,24 @@ export default function UploadScreen({ navigation }) {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    alignItems:"center", 
   },
   image: {
-    width: "90%",
-    aspectRatio: 3,
+    width:"100%",
+    height:100,
     borderWidth: 5,
     borderColor: "white",
     borderRadius: 5,
-    alignItems: "center",
+    margin:30,
+    marginBottom: 200,
+    alignSelf:"center"
   },
-  buttons: {
-    padding: 20,
-
-    width: "100%",
+  box:{
+    width:"80%",
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: "#00000000",
-    marginTop: 20,
-    height: 50,
-    width: "100%",
-    justifyContent: "center",
-  },
-  imageLoaded: {
-    width: "100%",
-    alignItems: "center",
+    paddingBottom: 20,
   },
 });
