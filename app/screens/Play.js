@@ -12,6 +12,14 @@ import {
 import {Audio} from "expo-av";
 
 export default class PlayScreen extends Component{
+  constructor(props) {
+    super(props);
+
+    this.state={
+      fileuri: null,
+    }
+  }
+
   async componentDidMount(){
     Audio.setAudioModeAsync({
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
@@ -24,13 +32,22 @@ export default class PlayScreen extends Component{
 
     const status = {
       shouldPlay: false,
-      volume: 1.0
+      volume: 1.0,
+      isLooping: true
     };
+  
 
-    //this.sound.loadAsync({uri:'https://raw.githubusercontent.com/yanooshhh/lines_ex/master/vlog_intro.mp3'}, status, false);
-    //this.sound.loadAsync({uri:'https://raw.githubusercontent.com/yanooshhh/lines_ex/master/lassus.wav'}, status, false);
-    //this.sound.loadAsync({uri:'http://solfege.northeurope.cloudapp.azure.com/static/266b3b02348e4c65a3d5005081956815.mp3'}, status, false);
-    this.sound.loadAsync({uri:'http://solfege.northeurope.cloudapp.azure.com/static/output.wav'}, status, false);
+    const server = 'http://solfege.northeurope.cloudapp.azure.com';
+
+    const getUri = async() =>{
+      try{
+        let response = await fetch(server+"/geturi");
+        return server + (await response.text());
+      }catch(error){
+        console.error(error);
+      }
+    }
+    this.sound.loadAsync({uri: await getUri()}, status, false);
   }
 
   async playSound() {
@@ -48,31 +65,47 @@ export default class PlayScreen extends Component{
 
   render(){
     const {imageUri, key, tempo, clef} = this.props.route.params;
-
     return(
       <ImageBackground
         style={styles.background}
         source={require("../assets/background.jpg")}
         blurRadius={30}
       >
+      <Image source={{ uri: imageUri }} style={styles.image} resizeMode="contain"/>
+      <View style={styles.box}>
+        
         <View>
-            <View style={styles.buttons}>
-              <View style={styles.button}>
-                  {/* <Text>{imageUri}</Text>
-                  <Image source={{uri: imageUri}} style={{height: 100, width:100}}/> */}
-                  <Button
-                    color="#de5b5b"
-                    title="Pause"
-                    onPress={this.stopSound.bind(this)}
-                  />
-                  <Button 
-                    color="#de5b5b" 
-                    title="Play" 
-                    onPress={this.playSound.bind(this)}
-                  />
-                </View>
+          
+          <View style={styles.buttons}>
+            <View style={styles.button}>
+              <Button
+                color="#de5b5b"
+                title="Play"
+                onPress={this.playSound.bind(this)}
+              />
             </View>
+            <View style={styles.button}>
+              <Button
+                color="#de5b5b"
+                title="Stop"
+                onPress={this.stopSound.bind(this)}
+              />
+            </View>
+            <View style={styles.button}>
+              <Button
+                color="#de5b5b"
+                title="Upload a new photo"
+                onPress={()=>{
+                  this.stopSound.bind(this);
+                  this.props.navigation.popToTop();
+                }}
+              />
+
+            </View>
+          </View>
         </View>
+      </View>
+
       </ImageBackground>
     )
   }
@@ -97,6 +130,10 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     width: "100%"
+  },
+  box:{
+    width:"80%",
+    marginBottom: 20,
   },
 });
 

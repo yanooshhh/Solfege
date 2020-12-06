@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState} from "react";
 import {
   Text,
   View,
@@ -8,9 +8,17 @@ import {
   ImageBackground,
   Image,
   Platform,
+  
 } from "react-native";
 
 function HomeScreen({ navigation }) {
+  const [connection, setConnection] = useState(false);
+  
+  useEffect(()=>{
+    fetch('http://solfege.northeurope.cloudapp.azure.com/ping')
+    .then((response)=> setConnection(response.ok))
+  })
+
   return (
     <ImageBackground
       style={styles.background}
@@ -22,7 +30,12 @@ function HomeScreen({ navigation }) {
           <Button 
             title="Start"
             color="#de5b5b"
-            onPress={() => navigation.navigate("Upload")}
+            onPress={() =>{
+              if(connection===true){
+                console.log(connection);
+                navigation.navigate("Upload");
+              }
+            }}
           />
         </View>
         <View style={styles.button}>

@@ -12,10 +12,17 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 
-export default function UploadScreen({ navigation }) {
+export default function UploadScreen({ route, navigation }) {
   const [image, setImage] = useState(null);
   const [cameraPermission, setCameraPermission] = useState(false);
   const [galleryPermission, setGalleryPermission] = useState(false);
+  // let first = true;
+  
+  // if(route.params.return === true)
+  // {
+  //   first= false;
+  // }
+
 
   useEffect(() => {
     (async () => {
@@ -103,7 +110,7 @@ export default function UploadScreen({ navigation }) {
           <View>
             <View style={styles.button}>
               <Button 
-                color="#de5b5b" 
+                color="#de5b5b" a
                 title="Take a photo" 
                 onPress={takeImage} 
               />
