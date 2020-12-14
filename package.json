@@ -8,15 +8,17 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-community/art": "^1.2.0",
     "@react-native-picker/picker": "^1.9.2",
     "@react-navigation/stack": "^5.12.4",
     "expo": "~39.0.2",
     "expo-av": "^8.6.0",
-    "expo-image-picker": "^9.1.1",
+    "expo-image-picker": "~9.1.1",
     "expo-status-bar": "~1.0.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
+    "react-native-indicator": "^1.2.2",
     "react-native-web": "~0.13.12",
     "react-navigation": "^4.4.3"
   },

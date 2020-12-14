@@ -11,8 +11,10 @@ import {
   Alert,
 } from "react-native";
 import {Audio} from "expo-av";
+import {MusicBarLoader,LineDotsLoader} from 'react-native-indicator';
 
 export default class PlayScreen extends Component{
+
   constructor(props) {
     super(props);
 
@@ -21,11 +23,12 @@ export default class PlayScreen extends Component{
       key: props.route.params.key,
       tempo: props.route.params.tempo,
       clef: props.route.params.clef,
+      loaded: false,
+      isPlaying:false,
     }
   }
 
   async componentDidMount(){
-
     Audio.setAudioModeAsync({
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
       shouldDuckAndroid: true,
@@ -40,7 +43,6 @@ export default class PlayScreen extends Component{
       volume: 1.0,
       isLooping: true
     };
-  
 
     const server = 'http://solfege.northeurope.cloudapp.azure.com';
 
@@ -62,7 +64,7 @@ export default class PlayScreen extends Component{
         });
         if (response.ok===false){
           Alert.alert(
-            "Error",
+            "Internal server error",
             await response.text(),
             [{text:"Got it!"}]);
           return "";
@@ -75,23 +77,23 @@ export default class PlayScreen extends Component{
     }
 
     this.sound.loadAsync({uri: await getUri()}, status, true);
+    this.state.loaded=true;
+    this.forceUpdate();
   }
 
   async playSound() {
     this.sound.playAsync();
-    let status = await this.sound.getStatusAsync();
-    console.log(status);
+    this.state.isPlaying=true;
+    this.forceUpdate();
   };
 
   async stopSound(){
     this.sound.stopAsync();
-    let status = await this.sound.getStatusAsync();
-    console.log(status);
+    this.state.isPlaying=false;
+    this.forceUpdate();
   }
 
-
   render(){
-
     return(
       <ImageBackground
         style={styles.background}
@@ -99,18 +101,25 @@ export default class PlayScreen extends Component{
         blurRadius={30}
       >
       <Image source={{ uri: this.state.imageUri }} style={styles.image} resizeMode="contain"/>
+        {this.state.loaded===false &&(
+          <LineDotsLoader color="#de5b5b"/>
+        )}
       <View style={styles.box}>
-        
-        <View>
-          
-          <View style={styles.buttons}>
+        <View style={styles.buttons}>
+          {this.state.isPlaying===true &&(
+            <MusicBarLoader barWidth={20} barHeight={70} color="#de5b5b"/>
+          )}
+
+          {this.state.loaded===true && this.state.isPlaying===false &&(            
             <View style={styles.button}>
-              <Button
-                color="#de5b5b"
-                title="Play"
-                onPress={this.playSound.bind(this)}
-              />
+                <Button
+                  color="#de5b5b"
+                  title="Play"
+                  onPress={this.playSound.bind(this)}
+                />
             </View>
+          )}
+          {this.state.loaded===true && this.state.isPlaying===true &&(            
             <View style={styles.button}>
               <Button
                 color="#de5b5b"
@@ -118,22 +127,22 @@ export default class PlayScreen extends Component{
                 onPress={this.stopSound.bind(this)}
               />
             </View>
-            <View style={styles.button}>
-              <Button
-                color="#de5b5b"
-                title="Upload a new photo"
-                onPress={()=>{
-                  this.stopSound.bind(this);
-                  this.props.navigation.popToTop();
-                }}
-              />
+          )}
 
-            </View>
+          <View style={styles.button}>
+            <Button
+              color="#de5b5b"
+              title="Upload a new photo"
+              onPress={()=>{
+                this.stopSound.bind(this);
+                this.props.navigation.popToTop();
+              }}
+            />
+
           </View>
         </View>
       </View>
-
-      </ImageBackground>
+    </ImageBackground>
     )
   }
 }

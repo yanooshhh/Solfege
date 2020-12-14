@@ -16,19 +16,17 @@ export default function UploadScreen({ route, navigation }) {
   const [image, setImage] = useState(null);
   const [cameraPermission, setCameraPermission] = useState(false);
   const [galleryPermission, setGalleryPermission] = useState(false);
-  // let first = true;
-  
-  // if(route.params.return === true)
-  // {
-  //   first= false;
-  // }
 
+  useEffect(() => {
+    (async () => {
+      const statusCamera = await ImagePicker.requestCameraPermissionsAsync();
+      setCameraPermission(statusCamera.granted);
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
       const statusGallery = await ImagePicker.requestCameraRollPermissionsAsync();
-      const statusCamera = await ImagePicker.requestCameraPermissionsAsync();
-      setCameraPermission(statusCamera.granted);
       setGalleryPermission(statusGallery.granted)
     })();
   }, []);
@@ -48,8 +46,6 @@ export default function UploadScreen({ route, navigation }) {
       allowsEditing: true,
     });
 
-    //console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
@@ -67,10 +63,7 @@ export default function UploadScreen({ route, navigation }) {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      
     });
-
-    //console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
