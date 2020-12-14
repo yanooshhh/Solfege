@@ -21,22 +21,21 @@ export default function SettingsScreen({ route, navigation }) {
                     <View>
                         <Text style={styles.text}>Key signature</Text>
                         <Picker 
-                            selectedValue={key}
-                            style={styles.button}
-                            onValueChange={(itemValue) =>
-                                setKey(itemValue)
-                            }>
-                            <Picker.Item label="D♭ / b♭m      (5 flats)" value="-5" />
-                            <Picker.Item label="A♭ / d♭m      (4 flats)" value="-4" />
-                            <Picker.Item label="E♭ / a♭m      (3 flats)" value="-3" />
-                            <Picker.Item label="B♭ / gm       (2 flats)" value="-2" />
-                            <Picker.Item label="F / dm         (1 flat)" value="-1" />
-                            <Picker.Item label="C / am" value="0" />
-                            <Picker.Item label="G / em        (1 sharp)" value="1" />
-                            <Picker.Item label="D / bm        (2 sharps)" value="2" />
-                            <Picker.Item label="A / f♯m       (3 sharps)" value="3" />
-                            <Picker.Item label="E / c♯m       (4 sharps)" value="4" />
-                            <Picker.Item label="B / g♯m       (5 sharps)" value="5" />
+                          selectedValue={key}
+                          style={styles.button}
+                          onValueChange={(itemValue) => setKey(itemValue)
+                        }>
+                          <Picker.Item label="D♭ / b♭m      (5 flats)" value="-5" />
+                          <Picker.Item label="A♭ / d♭m      (4 flats)" value="-4" />
+                          <Picker.Item label="E♭ / a♭m      (3 flats)" value="-3" />
+                          <Picker.Item label="B♭ / gm       (2 flats)" value="-2" />
+                          <Picker.Item label="F / dm         (1 flat)" value="-1" />
+                          <Picker.Item label="C / am" value="0" />
+                          <Picker.Item label="G / em        (1 sharp)" value="1" />
+                          <Picker.Item label="D / bm        (2 sharps)" value="2" />
+                          <Picker.Item label="A / f♯m       (3 sharps)" value="3" />
+                          <Picker.Item label="E / c♯m       (4 sharps)" value="4" />
+                          <Picker.Item label="B / g♯m       (5 sharps)" value="5" />
                         </Picker>
                     </View>
                     <View>

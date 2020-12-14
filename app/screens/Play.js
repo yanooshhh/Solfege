@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Image,
   Platform,
+  Alert,
 } from "react-native";
 import {Audio} from "expo-av";
 
@@ -16,11 +17,15 @@ export default class PlayScreen extends Component{
     super(props);
 
     this.state={
-      fileuri: null,
+      imageUri: props.route.params.imageUri,
+      key: props.route.params.key,
+      tempo: props.route.params.tempo,
+      clef: props.route.params.clef,
     }
   }
 
   async componentDidMount(){
+
     Audio.setAudioModeAsync({
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
       shouldDuckAndroid: true,
@@ -40,14 +45,36 @@ export default class PlayScreen extends Component{
     const server = 'http://solfege.northeurope.cloudapp.azure.com';
 
     const getUri = async() =>{
+      let data = new FormData();
+      data.append("image",{
+        uri: this.state.imageUri,
+        type: 'image/jpeg',
+        name:'img'
+      });
+      data.append("key", this.state.key);
+      data.append("tempo", this.state.tempo);
+      data.append("clef", this.state.clef);
+
       try{
-        let response = await fetch(server+"/geturi");
-        return server + (await response.text());
+        let response = await fetch(server+"/predict_uri",{
+          method: 'POST',
+          body: data,
+        });
+        if (response.ok===false){
+          Alert.alert(
+            "Error",
+            await response.text(),
+            [{text:"Got it!"}]);
+          return "";
+        }
+        return server + (await response.json());
+
       }catch(error){
         console.error(error);
       }
     }
-    this.sound.loadAsync({uri: await getUri()}, status, false);
+
+    this.sound.loadAsync({uri: await getUri()}, status, true);
   }
 
   async playSound() {
@@ -64,14 +91,14 @@ export default class PlayScreen extends Component{
 
 
   render(){
-    const {imageUri, key, tempo, clef} = this.props.route.params;
+
     return(
       <ImageBackground
         style={styles.background}
         source={require("../assets/background.jpg")}
         blurRadius={30}
       >
-      <Image source={{ uri: imageUri }} style={styles.image} resizeMode="contain"/>
+      <Image source={{ uri: this.state.imageUri }} style={styles.image} resizeMode="contain"/>
       <View style={styles.box}>
         
         <View>
@@ -134,6 +161,16 @@ const styles = StyleSheet.create({
   box:{
     width:"80%",
     marginBottom: 20,
+  },
+  image: {
+    width:"100%",
+    height:100,
+    borderWidth: 5,
+    borderColor: "white",
+    borderRadius: 5,
+    margin:30,
+    marginBottom: 200,
+    alignSelf:"center"
   },
 });
 
