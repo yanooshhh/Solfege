@@ -10,7 +10,6 @@ import {
   Alert
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import Constants from "expo-constants";
 
 export default function UploadScreen({ route, navigation }) {
   const [image, setImage] = useState(null);
@@ -44,6 +43,7 @@ export default function UploadScreen({ route, navigation }) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
+      quality: 0.8
     });
 
     if (!result.cancelled) {
@@ -63,6 +63,7 @@ export default function UploadScreen({ route, navigation }) {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
+      quality: 0.8
     });
 
     if (!result.cancelled) {

@@ -42,7 +42,7 @@ function HomeScreen({ navigation }) {
           <Button 
             title="About"
             color="#de5b5b"
-            onPress={() => navigation.navigate("Upload")}
+            onPress={() => navigation.navigate("About")}
           />
         </View>
       </View>

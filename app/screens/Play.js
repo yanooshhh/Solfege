@@ -11,7 +11,7 @@ import {
   Alert,
 } from "react-native";
 import {Audio} from "expo-av";
-import {MusicBarLoader,LineDotsLoader} from 'react-native-indicator';
+import {BarIndicator, MaterialIndicator} from 'react-native-indicators';
 
 export default class PlayScreen extends Component{
 
@@ -64,7 +64,7 @@ export default class PlayScreen extends Component{
         });
         if (response.ok===false){
           Alert.alert(
-            "Internal server error",
+            "Error",
             await response.text(),
             [{text:"Got it!"}]);
           return "";
@@ -76,7 +76,7 @@ export default class PlayScreen extends Component{
       }
     }
 
-    this.sound.loadAsync({uri: await getUri()}, status, true);
+    await this.sound.loadAsync({uri: await getUri()}, status, false);
     this.state.loaded=true;
     this.forceUpdate();
   }
@@ -93,6 +93,12 @@ export default class PlayScreen extends Component{
     this.forceUpdate();
   }
 
+  async stopAndPop(){
+    this.sound.stopAsync();
+    this.state.isPlaying=false;
+    this.props.navigation.popToTop();
+  }
+
   render(){
     return(
       <ImageBackground
@@ -100,15 +106,19 @@ export default class PlayScreen extends Component{
         source={require("../assets/background.jpg")}
         blurRadius={30}
       >
+
+      <View style={styles.box}>
       <Image source={{ uri: this.state.imageUri }} style={styles.image} resizeMode="contain"/>
         {this.state.loaded===false &&(
-          <LineDotsLoader color="#de5b5b"/>
+          <View style={styles.indicator}>
+            <MaterialIndicator color="#de5b5b"/>
+          </View>
         )}
-      <View style={styles.box}>
-        <View style={styles.buttons}>
           {this.state.isPlaying===true &&(
-            <MusicBarLoader barWidth={20} barHeight={70} color="#de5b5b"/>
+            <BarIndicator count={5} color="#de5b5b"/>
           )}
+        <View style={styles.buttons}>
+          
 
           {this.state.loaded===true && this.state.isPlaying===false &&(            
             <View style={styles.button}>
@@ -133,11 +143,7 @@ export default class PlayScreen extends Component{
             <Button
               color="#de5b5b"
               title="Upload a new photo"
-              onPress={()=>{
-                this.stopSound.bind(this);
-                this.props.navigation.popToTop();
-              }}
-            />
+              onPress={this.stopAndPop.bind(this)}/>
 
           </View>
         </View>
@@ -172,14 +178,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   image: {
+    top:50,
     width:"100%",
     height:100,
     borderWidth: 5,
     borderColor: "white",
     borderRadius: 5,
     margin:30,
-    marginBottom: 200,
+    marginBottom: 100,
     alignSelf:"center"
   },
+  indicator:{
+    margin: 20,
+  }
 });
 

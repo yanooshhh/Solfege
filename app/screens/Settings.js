@@ -16,13 +16,13 @@ export default function SettingsScreen({ route, navigation }) {
         blurRadius={20}
         >
             <Image style={styles.logo} source={require("../assets/logo.png")} />
-            <View>
+            <View style={styles.box}>
                 <View style={styles.buttons} >
                     <View>
                         <Text style={styles.text}>Key signature</Text>
                         <Picker 
                           selectedValue={key}
-                          style={styles.button}
+                          style={styles.picker}
                           onValueChange={(itemValue) => setKey(itemValue)
                         }>
                           <Picker.Item label="D♭ / b♭m      (5 flats)" value="-5" />
@@ -42,7 +42,7 @@ export default function SettingsScreen({ route, navigation }) {
                         <Text style={styles.text}>Tempo</Text>
                         <Picker
                             selectedValue={tempo}
-                            style={styles.button}
+                            style={styles.picker}
                             onValueChange={(itemValue, itemIndex) =>
                                 setTempo(itemValue)
                             }>
@@ -56,7 +56,7 @@ export default function SettingsScreen({ route, navigation }) {
                         <Text style={styles.text}>Clef</Text>
                         <Picker
                             selectedValue={clef}
-                            style={styles.button}
+                            style={styles.picker}
                             onValueChange={(itemValue, itemIndex) =>
                                 setClef(itemValue)
                             }>
@@ -68,10 +68,9 @@ export default function SettingsScreen({ route, navigation }) {
                 </View>
             </View>
             <View style={styles.buttons}>
-              <View style={styles.buttonnext}>
+              <View style={styles.button}>
                 <Button
                   color="#de5b5b"
-                  style={styles.buttons}
                   title="Next"
                   onPress={() => navigation.navigate("Play", {imageUri: route.params.imageUri, key: key, tempo: tempo, clef: clef})}
                 />
@@ -82,42 +81,44 @@ export default function SettingsScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-    background: {
-      flex: 1,
-      justifyContent: "flex-end",
-      alignItems: 'center'
-    },
-    buttons: {
-        padding: 20,
-        alignItems: "center",
-        width: "100%"
-      },
-      button: {
-        backgroundColor: "#de5b5b",
-        color: "#FFFFFF",
-        height: 30,
-        width: 170,
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 20
-      },
-      buttonnext: {
-        backgroundColor: "#00000000",
-        marginTop: 20,
-        height: 50,
-        width: "100%",
-        justifyContent: "center",
-      },
-    text:{
-        color: "#FFFFFF",
-        fontSize: 20,
-        alignSelf: "center",
-        padding: 20
-    },
-      logo: {
-        position: "absolute",
-        top: 100,
-        width: "50%",
-        height: 80,
-      },
+  background: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: 'center'
+  },
+  buttons: {
+      padding: 20,
+      alignItems: "center",
+      width: "100%"
+  },
+  
+  picker: {
+    backgroundColor: "#de5b5b",
+    color: "#FFFFFF",
+    height: 30,
+    width: 170,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20
+  },
+  button: {
+    paddingBottom: 20,
+    width:"90%"
+  },
+  text:{
+      color: "#FFFFFF",
+      fontSize: 20,
+      alignSelf: "center",
+      padding: 20
+  },
+  logo: {
+    position: "absolute",
+    top: 100,
+    width: "50%",
+    height: 80,
+  },
+  box:{
+    width:"80%",
+    marginBottom: 20,
+  },
 });
