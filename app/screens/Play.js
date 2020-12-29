@@ -44,8 +44,6 @@ export default class PlayScreen extends Component{
       isLooping: true
     };
 
-    const server = 'http://solfege.northeurope.cloudapp.azure.com';
-
     const getUri = async() =>{
       let data = new FormData();
       data.append("image",{
@@ -58,18 +56,19 @@ export default class PlayScreen extends Component{
       data.append("clef", this.state.clef);
 
       try{
-        let response = await fetch(server+"/predict_uri",{
+        let response = await fetch(global.serverAddress+"/predict_uri",{
           method: 'POST',
           body: data,
         });
         if (response.ok===false){
           Alert.alert(
-            "Error",
-            await response.text(),
+            "Server Error",
+            "Please try again. If this error keeps on appearing, contact the administrators.",
             [{text:"Got it!"}]);
+            console.log(await response.text())
           return "";
         }
-        return server + (await response.json());
+        return global.serverAddress + (await response.json());
 
       }catch(error){
         console.error(error);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState, Component} from "react";
 import {
   Text,
   View,
@@ -8,19 +8,52 @@ import {
   ImageBackground,
   Image,
   Platform,
+  Alert,
   
 } from "react-native";
 
-function HomeScreen({ navigation }) {
-  const [connection, setConnection] = useState(false);
-  
-  useEffect(()=>{
-    fetch('http://solfege.northeurope.cloudapp.azure.com/ping')
-    .then((response)=> setConnection(response.ok))
-  })
+export default class HomeScreen extends Component{
+  constructor(props)
+  {
+    super(props);
 
-  return (
-    <ImageBackground
+    global.serverAddress='http://solfege.northeurope.cloudapp.azure.com';
+  }
+
+  async checkConnectionAndGoNext(){
+    console.log(global.serverAddress);
+    try{
+      const controller = new AbortController();
+      const timeout = setTimeout(()=>{
+        controller.abort()
+      }, 3000)
+
+      const connection = await fetch(serverAddress+"/ping", {signal: controller.signal})
+        .then((response)=> {return response.ok});
+
+      if(connection){
+        this.props.navigation.navigate("Upload");
+      }
+      else{
+        this.showError();
+      }
+    }
+    catch(error){
+      this.showError();
+      console.log(error);
+    }
+  }
+
+  showError(){
+    Alert.alert(
+      "Cannot connect to the server",
+      "Check your network connection and the server address in About. If it does not help, contact the app administrators.",
+      [{text: "Got it!"}]);
+  }
+
+  render(){
+    return(
+      <ImageBackground
       style={styles.background}
       source={require("../assets/background.jpg")}
     >
@@ -30,11 +63,8 @@ function HomeScreen({ navigation }) {
           <Button 
             title="Start"
             color="#de5b5b"
-            onPress={() =>{
-              if(connection===true){
-                console.log(connection);
-                navigation.navigate("Upload");
-              }
+            onPress={() => {
+              this.checkConnectionAndGoNext();
             }}
           />
         </View>
@@ -42,12 +72,13 @@ function HomeScreen({ navigation }) {
           <Button 
             title="About"
             color="#de5b5b"
-            onPress={() => navigation.navigate("About")}
+            onPress={() => this.props.navigation.navigate("About")}
           />
         </View>
       </View>
     </ImageBackground>
-  );
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -75,4 +106,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HomeScreen;
+
