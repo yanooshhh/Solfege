@@ -77,6 +77,7 @@ export default function UploadScreen({ route, navigation }) {
       source={require("../assets/background.jpg")}
       blurRadius={30}
     >
+   
       <View style={styles.box}>
         {image !== null &&(
           <View>
@@ -102,6 +103,7 @@ export default function UploadScreen({ route, navigation }) {
 
         {image === null && (
           <View>
+            <Image source={require("../assets/tip.jpg")} style={styles.tip} resizeMode="contain"/>
             <View style={styles.button}>
               <Button 
                 color="#de5b5b" a
@@ -130,8 +132,9 @@ const styles = StyleSheet.create({
     alignItems:"center", 
   },
   image: {
-    width:"100%",
-    height:100,
+    //width:"100%",
+    //height:100,
+
     borderWidth: 5,
     borderColor: "white",
     borderRadius: 5,
@@ -139,6 +142,14 @@ const styles = StyleSheet.create({
     marginBottom: 200,
     alignSelf:"center"
   },
+  tip:{
+
+    height:300,
+    opacity: 0.8,
+    marginBottom: 110,
+    alignSelf:"center"
+  },
+
   box:{
     width:"80%",
     marginBottom: 20,

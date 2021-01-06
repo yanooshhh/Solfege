@@ -18,6 +18,7 @@ function AboutScreen({ navigation }) {
         
         <ImageBackground
             style={styles.background}
+            imageStyle={styles.backgroundphoto}
             source={require("../assets/background.jpg")}
             blurRadius={20}
         >
@@ -42,11 +43,10 @@ function AboutScreen({ navigation }) {
                     defaultValue={global.serverAddress}/>
                 
                 <Text style={styles.text2}>
-                    This application has been created by the team of: Janusz Jagiello, 
+                    This application has been created by the team of Janusz Jagiello, 
                     Franciszek Lukasiewicz and Filip Szymczak. It is a client for our OMR server.
-                    The whole system is the project for our bachelor thesis at Faculty of 
+                    The whole system is a part of our bachelor thesis at Faculty of
                     Mathematics and Informations Science, Warsaw University of Technology.
-                    {"\n\n"}Some legal facts
                     {"\n\n"}Warsaw, January 2021
                 </Text>
                 <View style={styles.buttons}>
@@ -66,14 +66,17 @@ function AboutScreen({ navigation }) {
     
 const styles = StyleSheet.create({
     background: {
-    flex: 1,
+    top: 0,
     alignItems: "center",
     justifyContent: "flex-start",
+    },
+    backgroundphoto:{
+        resizeMode: "cover",
     },
 
     box:{
         width:"80%",
-        marginBottom: 20,
+        marginBottom: 50,
       },
 
     text1:{
@@ -82,7 +85,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         alignSelf: "baseline",
         marginBottom:20,
-        marginTop:260
+        marginTop:290
     },
 
     text2:{
@@ -94,23 +97,21 @@ const styles = StyleSheet.create({
 
 
     textInput:{
-        width: "100%",
         borderColor: 'white',
         borderWidth:2,
         padding:5,
         color:"white",
         marginBottom:20,
         backgroundColor:"#ffffff50",
-        
-        
-        
+
     },
 
     logo: {
-    position: "absolute",
-    top: -180,
-    width: "80%",
-    height: 110,
+        position: "absolute",
+        alignSelf:"center",
+        top: 100,
+        width: "50%",
+        height: 80,
     },
 
     buttons: {

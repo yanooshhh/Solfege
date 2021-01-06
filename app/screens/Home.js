@@ -17,11 +17,10 @@ export default class HomeScreen extends Component{
   {
     super(props);
 
-    global.serverAddress='http://solfege.northeurope.cloudapp.azure.com';
+    global.serverAddress='http://solfege.mini.pw.edu.pl';
   }
 
   async checkConnectionAndGoNext(){
-    console.log(global.serverAddress);
     try{
       const controller = new AbortController();
       const timeout = setTimeout(()=>{
@@ -35,16 +34,16 @@ export default class HomeScreen extends Component{
         this.props.navigation.navigate("Upload");
       }
       else{
-        this.showError();
+        this.showAlert();
       }
     }
     catch(error){
-      this.showError();
+      this.showAlert();
       console.log(error);
     }
   }
 
-  showError(){
+  showAlert(){
     Alert.alert(
       "Cannot connect to the server",
       "Check your network connection and the server address in About. If it does not help, contact the app administrators.",
