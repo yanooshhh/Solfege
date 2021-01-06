@@ -72,7 +72,7 @@ export default function SettingsScreen({ route, navigation }) {
                 <Button
                   color="#de5b5b"
                   title="Next"
-                  onPress={() => navigation.navigate("Play", {imageUri: route.params.imageUri, key: key, tempo: tempo, clef: clef})}
+                  onPress={() => navigation.navigate("Play", {image: route.params.image, key: key, tempo: tempo, clef: clef})}
                 />
               </View>
             </View>

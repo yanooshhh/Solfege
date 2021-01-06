@@ -1,6 +1,7 @@
 import React from "react";
 import HomeScreen from "./app/screens/Home";
 import UploadScreen from "./app/screens/Upload";
+import UploadedScreen from "./app/screens/Uploaded";
 import PlayScreen from "./app/screens/Play";
 import SettingsScreen from "./app/screens/Settings";
 import AboutScreen from "./app/screens/About";
@@ -16,6 +17,7 @@ function App() {
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Upload" component={UploadScreen} />
+        <Stack.Screen name="Uploaded" component={UploadedScreen} />
         <Stack.Screen name="Play" component={PlayScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="About" component={AboutScreen} />

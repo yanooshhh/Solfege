@@ -19,7 +19,7 @@ export default class PlayScreen extends Component{
     super(props);
 
     this.state={
-      imageUri: props.route.params.imageUri,
+      image: props.route.params.image,
       key: props.route.params.key,
       tempo: props.route.params.tempo,
       clef: props.route.params.clef,
@@ -47,7 +47,7 @@ export default class PlayScreen extends Component{
     const getUri = async() =>{
       let data = new FormData();
       data.append("image",{
-        uri: this.state.imageUri,
+        uri: this.state.image.uri,
         type: 'image/jpeg',
         name:'img'
       });
@@ -107,7 +107,11 @@ export default class PlayScreen extends Component{
       >
 
       <View style={styles.box}>
-      <Image source={{ uri: this.state.imageUri }} style={styles.image} resizeMode="contain"/>
+      <Image 
+          source={{ uri: this.state.image.uri }} 
+          style={styles.image} 
+          aspectRatio={Math.max(maxthis.state.image.width/this.state.image.height,1.5)}
+      />
         {this.state.loaded===false &&(
           <View style={styles.indicator}>
             <MaterialIndicator color="#de5b5b"/>
@@ -179,13 +183,11 @@ const styles = StyleSheet.create({
   image: {
     top:50,
     width:"100%",
-    height:100,
-    borderWidth: 5,
-    borderColor: "white",
-    borderRadius: 5,
     margin:30,
-    marginBottom: 100,
-    alignSelf:"center"
+    marginBottom: 200,
+    alignSelf:"center",
+    borderWidth: 2,
+    borderColor: "white",
   },
   indicator:{
     margin: 20,

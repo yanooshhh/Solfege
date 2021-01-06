@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer} from "react";
 import {
   Button,
   Image,
@@ -11,10 +11,13 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
+
+
 export default function UploadScreen({ route, navigation }) {
   const [image, setImage] = useState(null);
   const [cameraPermission, setCameraPermission] = useState(false);
   const [galleryPermission, setGalleryPermission] = useState(false);
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
     (async () => {
@@ -47,7 +50,7 @@ export default function UploadScreen({ route, navigation }) {
     });
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      navigation.navigate("Uploaded", {image: result})
     }
   };
 
@@ -67,8 +70,9 @@ export default function UploadScreen({ route, navigation }) {
     });
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      navigation.navigate("Uploaded", {image: result})
     }
+
   };
 
   return (
@@ -79,47 +83,21 @@ export default function UploadScreen({ route, navigation }) {
     >
    
       <View style={styles.box}>
-        {image !== null &&(
-          <View>
-            <Image source={{ uri: image }} style={styles.image} resizeMode="contain"/>
-            <View style={styles.buttons}>
-              <View style={styles.button}>
-                <Button
-                  color="#de5b5b"
-                  title="Reset"
-                  onPress={() => setImage(null)}
-                />
-              </View>
-              <View style={styles.button}>
-                <Button
-                  color="#de5b5b"
-                  title="Next"
-                  onPress={() => navigation.navigate("Settings", { imageUri: image})}
-                />
-              </View>
-            </View>
-          </View>
-        )}
-
-        {image === null && (
-          <View>
-            <Image source={require("../assets/tip.jpg")} style={styles.tip} resizeMode="contain"/>
-            <View style={styles.button}>
-              <Button 
-                color="#de5b5b" a
-                title="Take a photo" 
-                onPress={takeImage} 
-              />
-            </View>
-            <View style={styles.button}>
-              <Button
-                color="#de5b5b"
-                title="Choose from gallery"
-                onPress={pickImage}
-              />
-            </View>
-          </View>
-        )}
+        <Image source={require("../assets/tip.jpg")} style={styles.tip} resizeMode="contain"/>
+        <View style={styles.button}>
+          <Button 
+            color="#de5b5b" a
+            title="Take a photo" 
+            onPress={takeImage} 
+          />
+        </View>
+        <View style={styles.button}>
+          <Button
+            color="#de5b5b"
+            title="Choose from gallery"
+            onPress={pickImage}
+          />
+        </View>
       </View>
     </ImageBackground>
   );
@@ -132,24 +110,25 @@ const styles = StyleSheet.create({
     alignItems:"center", 
   },
   image: {
-    //width:"100%",
-    //height:100,
-
-    borderWidth: 5,
-    borderColor: "white",
-    borderRadius: 5,
+    width:"100%",
+    aspectRatio: global.ratio,
     margin:30,
     marginBottom: 200,
-    alignSelf:"center"
+    alignSelf:"center",
+    borderWidth: 2,
+    borderColor: "white",
   },
   tip:{
-
     height:300,
     opacity: 0.8,
     marginBottom: 110,
     alignSelf:"center"
   },
-
+  border:{
+    borderWidth: 5,
+    borderColor: "white",
+    borderRadius: 5,
+  },
   box:{
     width:"80%",
     marginBottom: 20,
