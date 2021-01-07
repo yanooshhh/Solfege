@@ -18,9 +18,8 @@ export default function SettingsScreen({ route, navigation }) {
     <ImageBackground
       style={styles.background}
       source={require("../assets/background.jpg")}
-      blurRadius={20}
+      blurRadius={3}
     >
-      <Image style={styles.logo} source={require("../assets/logo.png")} />
       <View style={styles.box}>
         <View style={styles.buttons}>
           <View>
@@ -99,7 +98,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
-
   picker: {
     backgroundColor: "#de5b5b",
     color: "#FFFFFF",
@@ -118,12 +116,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: "center",
     padding: 20,
-  },
-  logo: {
-    position: "absolute",
-    top: 80,
-    width: "50%",
-    height: 80,
   },
   box: {
     width: "80%",

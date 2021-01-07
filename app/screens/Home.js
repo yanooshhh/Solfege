@@ -23,7 +23,7 @@ export default class HomeScreen extends Component {
       const controller = new AbortController();
       const timeout = setTimeout(() => {
         controller.abort();
-      }, 3000);
+      }, 6000);
 
       const connection = await fetch(serverAddress + "/ping", {
         signal: controller.signal,

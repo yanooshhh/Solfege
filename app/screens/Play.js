@@ -107,9 +107,8 @@ export default class PlayScreen extends Component {
       <ImageBackground
         style={styles.background}
         source={require("../assets/background.jpg")}
-        blurRadius={30}
+        blurRadius={3}
       >
-        <Image style={styles.logo} source={require("../assets/logo.png")} />
         <View style={styles.box}>
           <Image
             source={{ uri: this.params.image.uri }}
@@ -152,7 +151,7 @@ export default class PlayScreen extends Component {
               <Button
                 color="#de5b5b"
                 title="Upload a new photo"
-                onPress={() => this.props.navigation.popToTop()}
+                onPress={() => this.props.navigation.navigate("Upload")}
               />
             </View>
           </View>
@@ -195,11 +194,5 @@ const styles = StyleSheet.create({
   },
   indicatorPlaying: {
     marginBottom: 90,
-  },
-  logo: {
-    position: "absolute",
-    top: 80,
-    width: "50%",
-    height: 80,
   },
 });

@@ -18,10 +18,9 @@ export default function AboutScreen({ navigation }) {
       style={styles.background}
       imageStyle={styles.backgroundphoto}
       source={require("../assets/background.jpg")}
-      blurRadius={20}
+      blurRadius={3}
     >
       <View>
-        <Image style={styles.logo} source={require("../assets/logo.png")} />
         <View style={styles.box}>
           <Text style={styles.text1}>Address of the server</Text>
 
@@ -68,28 +67,24 @@ const styles = StyleSheet.create({
   backgroundphoto: {
     resizeMode: "cover",
   },
-
   box: {
     width: "80%",
-    marginBottom: 30,
+    marginBottom: 180,
   },
-
   text1: {
     color: "white",
     fontSize: 15,
     fontWeight: "bold",
     alignSelf: "baseline",
-    marginBottom: 20,
-    marginTop: 290,
+    marginBottom: 10,
+    marginTop: 300,
   },
-
   text2: {
     color: "white",
     fontSize: 15,
     alignSelf: "center",
-    paddingBottom: 90,
+    textAlign: "justify",
   },
-
   textInput: {
     borderColor: "white",
     borderWidth: 2,
@@ -98,15 +93,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     backgroundColor: "#ffffff50",
   },
-
-  logo: {
-    position: "absolute",
-    alignSelf: "center",
-    top: 100,
-    width: "50%",
-    height: 80,
-  },
-
   buttons: {
     height: 90,
     backgroundColor: "#00000000",
