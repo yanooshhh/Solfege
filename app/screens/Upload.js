@@ -81,7 +81,7 @@ export default function UploadScreen({ route, navigation }) {
       source={require("../assets/background.jpg")}
       blurRadius={30}
     >
-   
+      <Image style={styles.logo} source={require("../assets/logo.png")} />
       <View style={styles.box}>
         <Image source={require("../assets/tip.jpg")} style={styles.tip} resizeMode="contain"/>
         <View style={styles.button}>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   tip:{
     height:300,
     opacity: 0.8,
-    marginBottom: 110,
+    marginBottom: 90,
     alignSelf:"center"
   },
   border:{
@@ -135,5 +135,11 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingBottom: 20,
+  },
+  logo: {
+    position: "absolute",
+    top: 80,
+    width: "50%",
+    height: 80,
   },
 });

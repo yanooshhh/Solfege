@@ -26,8 +26,11 @@ export default class PlayScreen extends Component{
       loaded: false,
       isPlaying:false,
     }
+
+    this.controller = new AbortController();
   }
 
+  
   async componentDidMount(){
     Audio.setAudioModeAsync({
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
@@ -59,6 +62,7 @@ export default class PlayScreen extends Component{
         let response = await fetch(global.serverAddress+"/predict_uri",{
           method: 'POST',
           body: data,
+          signal: this.controller.signal,
         });
         if (response.ok===false){
           Alert.alert(
@@ -71,13 +75,24 @@ export default class PlayScreen extends Component{
         return global.serverAddress + (await response.json());
 
       }catch(error){
-        console.error(error);
+        console.log(error);
       }
     }
-
-    await this.sound.loadAsync({uri: await getUri()}, status, false);
+    try{
+      const uri = await getUri();
+      await this.sound.loadAsync({uri: uri}, status, false);
+    }
+    catch(error)
+    {
+      console.log(error);
+    }
     this.state.loaded=true;
     this.forceUpdate();
+  }
+
+  async componentWillUnmount(){
+    this.controller.abort();
+    this.sound.stopAsync();
   }
 
   async playSound() {
@@ -105,12 +120,12 @@ export default class PlayScreen extends Component{
         source={require("../assets/background.jpg")}
         blurRadius={30}
       >
-
+      <Image style={styles.logo} source={require("../assets/logo.png")} />
       <View style={styles.box}>
       <Image 
           source={{ uri: this.state.image.uri }} 
           style={styles.image} 
-          aspectRatio={Math.max(maxthis.state.image.width/this.state.image.height,1.5)}
+          aspectRatio={Math.max(this.state.image.width/this.state.image.height,1.5)}
       />
         {this.state.loaded===false &&(
           <View style={styles.indicator}>
@@ -118,9 +133,11 @@ export default class PlayScreen extends Component{
           </View>
         )}
           {this.state.isPlaying===true &&(
-            <BarIndicator count={5} color="#de5b5b"/>
+            <View style={styles.indicator}>
+              <BarIndicator count={5} color="#de5b5b"/>
+            </View>
           )}
-        <View style={styles.buttons}>
+        <View>
           
 
           {this.state.loaded===true && this.state.isPlaying===false &&(            
@@ -160,8 +177,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
+    justifyContent: "flex-end",
   },
   button: {
     backgroundColor: "#00000000",
@@ -171,26 +187,29 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
   },
-  buttons: {
-    padding: 20,
-    alignItems: "center",
-    width: "100%"
-  },
   box:{
     width:"80%",
-    marginBottom: 20,
+    marginBottom: 30,
   },
   image: {
-    top:50,
+    bottom:200,
+    position: "absolute",
     width:"100%",
     margin:30,
-    marginBottom: 200,
+    marginBottom: 120,
     alignSelf:"center",
     borderWidth: 2,
     borderColor: "white",
   },
   indicator:{
-    margin: 20,
-  }
+    marginTop: 20,
+    marginBottom: 50,
+  },
+  logo: {
+    position: "absolute",
+    top: 80,
+    width: "50%",
+    height: 80,
+  },
 });
 

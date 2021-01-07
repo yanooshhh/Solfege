@@ -14,6 +14,7 @@ export default function UploadedScreen({ route, navigation }) {
       source={require("../assets/background.jpg")}
       blurRadius={30}
     >
+      <Image style={styles.logo} source={require("../assets/logo.png")} />
       <View style={styles.box}>
         <Image 
             source={{ uri: route.params.image.uri }} 
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
   image: {
     width:"100%",
     margin:30,
-    marginBottom: 200,
+    marginBottom: 220,
     alignSelf:"center",
     borderWidth: 2,
     borderColor: "white",
@@ -72,5 +73,11 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingBottom: 20,
+  },
+  logo: {
+    position: "absolute",
+    top: 80,
+    width: "50%",
+    height: 80,
   },
 });

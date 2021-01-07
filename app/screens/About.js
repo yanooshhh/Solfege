@@ -44,8 +44,8 @@ function AboutScreen({ navigation }) {
                 
                 <Text style={styles.text2}>
                     This application has been created by the team of Janusz Jagiello, 
-                    Franciszek Lukasiewicz and Filip Szymczak. It is a client for our OMR server.
-                    The whole system is a part of our bachelor thesis at Faculty of
+                    Franciszek Lukasiewicz and Filip Szymczak. It serves as a client to our OMR server.
+                    The whole system is a part of our bachelor thesis projectat Faculty of
                     Mathematics and Informations Science, Warsaw University of Technology.
                     {"\n\n"}Warsaw, January 2021
                 </Text>
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         borderWidth:2,
         padding:5,
         color:"white",
-        marginBottom:20,
+        marginBottom:30,
         backgroundColor:"#ffffff50",
 
     },
