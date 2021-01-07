@@ -10,33 +10,32 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import {Audio} from "expo-av";
-import {BarIndicator, MaterialIndicator} from 'react-native-indicators';
+import { Audio } from "expo-av";
+import { BarIndicator, MaterialIndicator } from "react-native-indicators";
 
-export default class PlayScreen extends Component{
-
+export default class PlayScreen extends Component {
   constructor(props) {
     super(props);
-
-    this.state={
+    this.params = {
       image: props.route.params.image,
       key: props.route.params.key,
       tempo: props.route.params.tempo,
       clef: props.route.params.clef,
+    };
+    this.state = {
       loaded: false,
-      isPlaying:false,
-    }
+      isPlaying: false,
+    };
 
     this.controller = new AbortController();
   }
 
-  
-  async componentDidMount(){
+  async componentDidMount() {
     Audio.setAudioModeAsync({
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
       shouldDuckAndroid: true,
       staysActiveInBackground: true,
-      playThroughEarpieceAndroid: true
+      playThroughEarpieceAndroid: true,
     });
 
     this.sound = new Audio.Sound();
@@ -44,132 +43,122 @@ export default class PlayScreen extends Component{
     const status = {
       shouldPlay: false,
       volume: 1.0,
-      isLooping: true
+      isLooping: true,
     };
 
-    const getUri = async() =>{
+    const getUri = async () => {
       let data = new FormData();
-      data.append("image",{
-        uri: this.state.image.uri,
-        type: 'image/jpeg',
-        name:'img'
+      data.append("image", {
+        uri: this.params.image.uri,
+        type: "image/jpeg",
+        name: "img",
       });
-      data.append("key", this.state.key);
-      data.append("tempo", this.state.tempo);
-      data.append("clef", this.state.clef);
+      data.append("key", this.params.key);
+      data.append("tempo", this.params.tempo);
+      data.append("clef", this.params.clef);
 
-      try{
-        let response = await fetch(global.serverAddress+"/predict_uri",{
-          method: 'POST',
+      try {
+        let response = await fetch(global.serverAddress + "/predict_uri", {
+          method: "POST",
           body: data,
           signal: this.controller.signal,
         });
-        if (response.ok===false){
+        if (response.ok === false) {
           Alert.alert(
             "Server Error",
             "Please try again. If this error keeps on appearing, contact the administrators.",
-            [{text:"Got it!"}]);
-            console.log(await response.text())
+            [{ text: "Got it!" }]
+          );
+          console.log(await response.text());
           return "";
         }
         return global.serverAddress + (await response.json());
-
-      }catch(error){
-        console.log(error);
-      }
-    }
-    try{
+      } catch (error) {}
+    };
+    try {
       const uri = await getUri();
-      await this.sound.loadAsync({uri: uri}, status, false);
-    }
-    catch(error)
-    {
-      console.log(error);
-    }
-    this.state.loaded=true;
+      await this.sound.loadAsync({ uri: uri }, status, false);
+    } catch (error) {}
+    this.state.loaded = true;
     this.forceUpdate();
   }
 
-  async componentWillUnmount(){
+  async componentWillUnmount() {
     this.controller.abort();
-    this.sound.stopAsync();
+    if (this.state.isPlaying) {
+      this.sound.stopAsync();
+    }
   }
 
   async playSound() {
     this.sound.playAsync();
-    this.state.isPlaying=true;
-    this.forceUpdate();
-  };
-
-  async stopSound(){
-    this.sound.stopAsync();
-    this.state.isPlaying=false;
+    this.state.isPlaying = true;
     this.forceUpdate();
   }
 
-  async stopAndPop(){
+  async stopSound() {
     this.sound.stopAsync();
-    this.state.isPlaying=false;
-    this.props.navigation.popToTop();
+    this.state.isPlaying = false;
+    this.forceUpdate();
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <ImageBackground
         style={styles.background}
         source={require("../assets/background.jpg")}
         blurRadius={30}
       >
-      <Image style={styles.logo} source={require("../assets/logo.png")} />
-      <View style={styles.box}>
-      <Image 
-          source={{ uri: this.state.image.uri }} 
-          style={styles.image} 
-          aspectRatio={Math.max(this.state.image.width/this.state.image.height,1.5)}
-      />
-        {this.state.loaded===false &&(
-          <View style={styles.indicator}>
-            <MaterialIndicator color="#de5b5b"/>
-          </View>
-        )}
-          {this.state.isPlaying===true &&(
-            <View style={styles.indicator}>
-              <BarIndicator count={5} color="#de5b5b"/>
+        <Image style={styles.logo} source={require("../assets/logo.png")} />
+        <View style={styles.box}>
+          <Image
+            source={{ uri: this.params.image.uri }}
+            style={styles.image}
+            aspectRatio={Math.max(
+              this.params.image.width / this.params.image.height,
+              1.5
+            )}
+          />
+          {this.state.loaded === false && (
+            <View style={styles.indicatorLoading}>
+              <MaterialIndicator color="#de5b5b" />
             </View>
           )}
-        <View>
-          
-
-          {this.state.loaded===true && this.state.isPlaying===false &&(            
-            <View style={styles.button}>
+          {this.state.isPlaying === true && (
+            <View style={styles.indicatorPlaying}>
+              <BarIndicator count={5} color="#de5b5b" />
+            </View>
+          )}
+          <View>
+            {this.state.loaded === true && this.state.isPlaying === false && (
+              <View style={styles.button}>
                 <Button
                   color="#de5b5b"
                   title="Play"
                   onPress={this.playSound.bind(this)}
                 />
-            </View>
-          )}
-          {this.state.loaded===true && this.state.isPlaying===true &&(            
+              </View>
+            )}
+            {this.state.loaded === true && this.state.isPlaying === true && (
+              <View style={styles.button}>
+                <Button
+                  color="#de5b5b"
+                  title="Stop"
+                  onPress={this.stopSound.bind(this)}
+                />
+              </View>
+            )}
             <View style={styles.button}>
               <Button
                 color="#de5b5b"
-                title="Stop"
-                onPress={this.stopSound.bind(this)}
+                title="Upload a new photo"
+                onPress={() => this.props.navigation.popToTop()}
               />
             </View>
-          )}
-
-          <View style={styles.button}>
-            <Button
-              color="#de5b5b"
-              title="Upload a new photo"
-              onPress={this.stopAndPop.bind(this)}/>
-
           </View>
         </View>
-      </View>
-    </ImageBackground>
-    )
+      </ImageBackground>
+    );
   }
 }
 
@@ -181,29 +170,31 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#00000000",
-    marginTop: 20,
+    marginTop: 10,
     height: 50,
 
     width: "100%",
     justifyContent: "center",
   },
-  box:{
-    width:"80%",
+  box: {
+    width: "80%",
     marginBottom: 30,
   },
   image: {
-    bottom:200,
+    bottom: 200,
     position: "absolute",
-    width:"100%",
-    margin:30,
+    width: "100%",
+    margin: 30,
     marginBottom: 120,
-    alignSelf:"center",
+    alignSelf: "center",
     borderWidth: 2,
     borderColor: "white",
   },
-  indicator:{
-    marginTop: 20,
-    marginBottom: 50,
+  indicatorLoading: {
+    marginBottom: 120,
+  },
+  indicatorPlaying: {
+    marginBottom: 90,
   },
   logo: {
     position: "absolute",
@@ -212,4 +203,3 @@ const styles = StyleSheet.create({
     height: 80,
   },
 });
-

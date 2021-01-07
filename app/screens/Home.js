@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Component} from "react";
+import React, { useEffect, useState, Component } from "react";
 import {
   Text,
   View,
@@ -9,74 +9,74 @@ import {
   Image,
   Platform,
   Alert,
-  
 } from "react-native";
 
-export default class HomeScreen extends Component{
-  constructor(props)
-  {
+export default class HomeScreen extends Component {
+  constructor(props) {
     super(props);
 
-    global.serverAddress='http://solfege.mini.pw.edu.pl';
+    global.serverAddress = "http://solfege.mini.pw.edu.pl";
   }
 
-  async checkConnectionAndGoNext(){
-    try{
+  async checkConnectionAndGoNext() {
+    try {
       const controller = new AbortController();
-      const timeout = setTimeout(()=>{
-        controller.abort()
-      }, 3000)
+      const timeout = setTimeout(() => {
+        controller.abort();
+      }, 3000);
 
-      const connection = await fetch(serverAddress+"/ping", {signal: controller.signal})
-        .then((response)=> {return response.ok});
+      const connection = await fetch(serverAddress + "/ping", {
+        signal: controller.signal,
+      }).then((response) => {
+        return response.ok;
+      });
 
-      if(connection){
+      if (connection) {
         this.props.navigation.navigate("Upload");
-      }
-      else{
+      } else {
         this.showAlert();
       }
-    }
-    catch(error){
+    } catch (error) {
       this.showAlert();
       console.log(error);
     }
   }
 
-  showAlert(){
+  showAlert() {
     Alert.alert(
       "Cannot connect to the server",
-      "Check your network connection and the server address in About. If it does not help, contact the app administrators.",
-      [{text: "Got it!"}]);
+      "Check your network connection and the server address in About. If it does not help, contact the administrators.",
+      [{ text: "Got it!" }]
+    );
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <ImageBackground
-      style={styles.background}
-      source={require("../assets/background.jpg")}
-    >
-      <Image style={styles.logo} source={require("../assets/logo.png")} />
-      <View style={styles.buttons}>
-        <View style={styles.button}>
-          <Button 
-            title="Start"
-            color="#de5b5b"
-            onPress={() => {
-              this.checkConnectionAndGoNext();
-            }}
-          />
+        style={styles.background}
+        source={require("../assets/background.jpg")}
+      >
+        <Image style={styles.logo} source={require("../assets/logo.png")} />
+        <View style={styles.buttons}>
+          <View style={styles.button}>
+            <Button
+              title="Start"
+              color="#de5b5b"
+              onPress={() => {
+                this.checkConnectionAndGoNext();
+              }}
+            />
+          </View>
+          <View style={styles.button}>
+            <Button
+              title="About"
+              color="#de5b5b"
+              onPress={() => this.props.navigation.navigate("About")}
+            />
+          </View>
         </View>
-        <View style={styles.button}>
-          <Button 
-            title="About"
-            color="#de5b5b"
-            onPress={() => this.props.navigation.navigate("About")}
-          />
-        </View>
-      </View>
-    </ImageBackground>
-    )
+      </ImageBackground>
+    );
   }
 }
 
@@ -102,7 +102,5 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingBottom: 20,
-  }
+  },
 });
-
-
