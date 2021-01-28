@@ -11,7 +11,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
 
-function App() {
+export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode="none">
@@ -25,5 +25,3 @@ function App() {
     </NavigationContainer>
   );
 }
-
-export default App;

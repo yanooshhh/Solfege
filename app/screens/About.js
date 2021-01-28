@@ -38,11 +38,11 @@ export default function AboutScreen({ navigation }) {
           />
 
           <Text style={styles.text2}>
-            This application has been created by the team of Janusz Jagiello,
+            This application has been developed by the team of Janusz Jagiello,
             Franciszek Lukasiewicz and Filip Szymczak. It serves as a client to
-            our OMR server. The whole system is a part of our bachelor thesis
-            projectat Faculty of Mathematics and Informations Science, Warsaw
-            University of Technology.
+            our OMR server. The whole system has been created as a part of our
+            bachelor thesis project at Faculty of Mathematics and Informations
+            Science, Warsaw University of Technology.
             {"\n\n"}Warsaw, January 2021
           </Text>
           <View style={styles.buttons}>
